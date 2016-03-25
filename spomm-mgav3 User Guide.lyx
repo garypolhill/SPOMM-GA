@@ -1,0 +1,4842 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+SPOMM-MGAv3 User Guide
+\end_layout
+
+\begin_layout Author
+Gary Polhill
+\end_layout
+
+\begin_layout Date
+14 February 2014
+\end_layout
+
+\begin_layout Address
+\align center
+The James Hutton Institute, Craigiebuckler, Aberdeen.
+ AB15 8QH.
+ United Kingdom
+\end_layout
+
+\begin_layout Section
+Synopsis
+\end_layout
+
+\begin_layout Standard
+spomm-MGAv3.pl is a Perl script designed to search for habitat and SPOMM
+ parameters that fit an observed distribution of species and spatially-explicit
+ biophysical data.
+ A multicriteria genetic algorithm is used to perform this search.
+\end_layout
+
+\begin_layout Standard
+SPOMM-MGAv3 requires that you have SPOMM 2.3 installed on your system, and
+ Perl 5.
+ (Version 5.8.8 used locally.)
+\end_layout
+
+\begin_layout Standard
+Usage:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},breaklines=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+spomm-MGAv3.pl [-maxproc <maxproc>] [-keepall] [-deleteall] [-keephof] [-habmod
+ <modifier>] [-fitnessnooccup] [-fitnesshalfpenalty] [-conflate <formula>]
+ [-useextinct] [-usenoequilibrium] [-blob <blob cmd>] [-noblob] [-blobkey
+ <blob key>] [-wd <dir>] [-log <file>] [-cmd <exe>] <GA file> <SPOMM file>
+ <occupancy file> <biophysical data files...>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+SPOMM-MGAv3 can also continue from a previous run, in which case the usage
+ would be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+spomm-MGAv3.pl continue <file> [overriding options...]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The options are explained in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Command-line-options-available"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways true
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Command-line-options-available"
+
+\end_inset
+
+Command-line options available to spomm-MGAv3.pl
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="17" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="1.5in">
+<column alignment="center" valignment="top" width="1.5in">
+<column alignment="left" valignment="top" width="4in">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Option
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Argument
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Default
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-maxproc
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+number
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Maximum number of concurrent processes to run
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-keepall
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Keep data from all runs made (will use a lot of data)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-deleteall
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Delete all data from all runs
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-keephof
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+Yes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Keep only data from the runs saved to the `hall of fame' -- the runs throughout
+ the search having the highest fitness
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-habmod
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+pct
+\family default
+, 
+\family typewriter
+none
+\family default
+ or 
+\family typewriter
+sigmoid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+pct
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Modify the habitat computed from the 
+\begin_inset Formula $\overrightarrow{\beta}$
+\end_inset
+
+ vector (
+\begin_inset Formula $h$
+\end_inset
+
+) using the stated method.
+ 
+\family typewriter
+pct
+\family default
+ divides by 100, 
+\family typewriter
+sigmoid
+\family default
+ puts the result through 
+\begin_inset Formula $1/1+e^{-h}$
+\end_inset
+
+ , 
+\family typewriter
+none
+\family default
+ does nothing.
+ Note that 
+\family typewriter
+sigmoid
+\family default
+ is the default for 
+\family typewriter
+searchSpline*BETA
+\family default
+; in this case, values of the 
+\family typewriter
+-habmod
+\family default
+ argument other than 
+\family typewriter
+sigmoid
+\family default
+ or 
+\family typewriter
+none
+\family default
+ cause an exception.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-fitnessnooccup
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The fitness function should not include a comparison of total occupancy
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-fitnesshalfpenalty
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Add a dimension to the fitness function penalising runs generating lots
+ of cells with 0.5 occupancy probability.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-conflate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+no
+\family default
+, 
+\family typewriter
+sum
+\family default
+, 
+\family typewriter
+product
+\family default
+, 
+\family typewriter
+wsum(
+\family default
+\emph on
+weights...
+\family typewriter
+\emph default
+)
+\family default
+ or 
+\family typewriter
+wproduct(
+\family default
+\emph on
+weights...
+\family typewriter
+\emph default
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Use a single criterion fitness function by converting the fitness vector
+ to a single value.
+ The 
+\family typewriter
+sum
+\family default
+ option adds all elements of the fitness vector together to produce a scalar
+ fitness value.
+ The 
+\family typewriter
+product
+\family default
+ option multiplies them.
+ The 
+\family typewriter
+wsum
+\family default
+ option allows you to compute a weighted sum: the 
+\emph on
+weights...
+
+\emph default
+ argument is a comma-separated (no spaces) list of weights to use for each
+ element of the fitness vector (see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Fitness-function"
+
+\end_inset
+
+).
+ The 
+\family typewriter
+wproduct
+\family default
+ option allows you to compute a weighted product.
+ Here the 
+\emph on
+weights...
+
+\emph default
+ argument is a comma-separated list of powers to raise each element of the
+ fitness vector to before computing the product.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-useextinct
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Runs involving total extinction should compare occupancy with the observed
+ data
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-usenoequilibrium
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Do not treat runs that fail to reach equilibrium as automatically inferior
+ to those that do reach equilibrium
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-blob
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+executable R script
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Irrelevant unless you are using this at MLURI
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Location of R script to produce `blob' plots.
+ See Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Output"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-noblob
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+No
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Do not produce `blob' plots.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-blobkey
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+integer
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of levels in `blob' plots.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-wd
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+directory
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+/var/tmp/spomm-GA/
+\family default
+\emph on
+pid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Working directory to save results of the simulation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-log
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+file
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+LOG
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Log file.
+ If this does not begin with /, it will be stored in the working directory
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-cmd
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+command
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Irrelevant unless you are using this at MLURI
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SPOMM executable to run
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The GA file is a text file containing configuration parameters for the genetic
+ algorithm.
+ The SPOMM file is the SPOMM parameter file (given to the SPOMM 2.3 executable
+ with the -p command line argument) to use with the simulation.
+ The species file, and if used, habitat file referred to in the SPOMM parameter
+ file should be present in the current working directory.
+ The occupancy file contains observed species occupancy data for each patch.
+ The biophysical data files are files containing observed biophysical data
+ for each patch.
+ The GA is expected to find SPOMM parameters specified by the user and a
+ vector 
+\begin_inset Formula $\mathbf{\overrightarrow{\beta}}$
+\end_inset
+
+ with one element for each biophysical file such that for each patch 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $h_{i}=\mathbf{\overrightarrow{\beta}.}\overrightarrow{b_{i}}$
+\end_inset
+
+, where 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+ is the habitat on patch 
+\begin_inset Formula $i$
+\end_inset
+
+ (
+\begin_inset Formula $0\leqslant h_{i}\leqslant1$
+\end_inset
+
+), and 
+\begin_inset Formula $\overrightarrow{b_{i}}$
+\end_inset
+
+ is the vector of biophysical characteristics, to maximise the fit to the
+ observed occupancy.
+\end_layout
+
+\begin_layout Standard
+When using the 
+\family typewriter
+continue
+\family default
+ command, the next argument should be the name of a file saved by SPOMM-MGA
+ in the working directory (with name state-
+\emph on
+pid
+\emph default
+.txt).
+ This file contains information on the working directory and current working
+ directory
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Sorry for the confusion: the 
+\emph on
+working directory
+\emph default
+ of a run is that given by the -wd command-line option or its default value:
+ the place where the results are saved.
+ The 
+\emph on
+current working directory
+\emph default
+ of a run is the directory you were in when you executed the spomm-MGA.pl
+ command (on Unix machines, the result of the pwd command).
+\end_layout
+
+\end_inset
+
+ of the previous run, its command-line options, population and fitnesses.
+ In continuation mode, the program will reuse as much data as it can.
+ It expects the GA file, SPOMM files and biophysical data files used in
+ the previous run to be in the same place as they were then, and to have
+ been unchanged.
+ (Some changes to the GA file might work, but not to population size, beta
+ names or SPOMM parameters searched.) It will also re-use any command-line
+ options you gave to the previous run, though you can override some of them
+ by giving them after the continuation file argument.
+ If the run data files are still available in the original working directory,
+ they will be re-used, otherwise fitnesses for each member of the population
+ will be recomputed.
+\end_layout
+
+\begin_layout Standard
+Note that the program, depending on its configuration, could take a very
+ long time to run, and, particularly if the -keepall command-line option
+ is given, use a great deal of disk space.
+\end_layout
+
+\begin_layout Section
+File formats
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:GA-file"
+
+\end_inset
+
+GA file
+\end_layout
+
+\begin_layout Standard
+The GA file is formatted thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+population <population>
+\end_layout
+
+\begin_layout Plain Layout
+
+generations <generations>
+\end_layout
+
+\begin_layout Plain Layout
+
+rule <rule>
+\end_layout
+
+\begin_layout Plain Layout
+
+parameters {
+\end_layout
+
+\begin_layout Plain Layout
+
+	<param name> = <param value>
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+searchSPOMM {
+\end_layout
+
+\begin_layout Plain Layout
+
+	<SPOMM file> / <SPOMM parameter> : <prior> <constraint>
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+searchBETA|searchGaussianBETA|searchPoly<n>BETA {
+\end_layout
+
+\begin_layout Plain Layout
+
+	<name[,name]|intercept|*>[^{M|S|<m>}] : <prior> <constraint>
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+<population>
+\family default
+ should be replaced with the size of population you want the GA to use,
+ and 
+\family typewriter
+<generations>
+\family default
+ by the number of generations you want the GA to run for.
+ The 
+\family typewriter
+<rule>
+\family default
+ should be one of 
+\family typewriter
+DEMC
+\family default
+, 
+\family typewriter
+DE
+\family default
+, 
+\family typewriter
+GA
+\family default
+, 
+\family typewriter
+DEMCStrict
+\family default
+ , 
+\family typewriter
+DEMCRlen
+\family default
+, 
+\family typewriter
+DEMCStrictNormal
+\family default
+, 
+\family typewriter
+DEMCRlenNormal
+\family default
+, 
+\family typewriter
+DEMCZStrict
+\family default
+, 
+\family typewriter
+DEMCZRlen
+\family default
+, 
+\family typewriter
+DEMCZStrictNormal
+\family default
+, 
+\family typewriter
+DEMCZRlenNormal
+\family default
+ or 
+\family typewriter
+DEStrict
+\family default
+.
+ The parameters then list the parameters to be used for the rule you have
+ selected.
+ These are explained in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Parameters-for-rules"
+
+\end_inset
+
+.
+ The rules themselves are explained below:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Parameters-for-rules"
+
+\end_inset
+
+Parameters for rules in the GA
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="11" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="17.5col%">
+<column alignment="center" valignment="top" width="35col%">
+<column alignment="left" valignment="top" width="50col%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Parameter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Applicable rules
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Explanation
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+select
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+DEMC
+\family default
+, 
+\family typewriter
+DE
+\family default
+, 
+\family typewriter
+GA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Selection method to use for generating the new population.
+ One of 
+\family typewriter
+posreplacebetter
+\family default
+ (see 
+\family typewriter
+DEStrict
+\family default
+), 
+\family typewriter
+posprobpreplacebetter
+\family default
+ (see 
+\family typewriter
+DEMCStrict
+\family default
+), 
+\family typewriter
+lenprobreplacebetter
+\family default
+ (see 
+\family typewriter
+DEMCRLen
+\family default
+), 
+\family typewriter
+lottery
+\family default
+, 
+\family typewriter
+top
+\family default
+ or 
+\family typewriter
+new
+\family default
+ (see 
+\family typewriter
+GA
+\family default
+).
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+gamma
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+DEMC*
+\family default
+, 
+\family typewriter
+DEStrict
+\family default
+, any where 
+\family typewriter
+select = posreplacebetter
+\family default
+ or 
+\family typewriter
+posprobreplacebetter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Differential evolution parameter
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+b
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+DEMC*
+\family default
+, any where 
+\family typewriter
+select = posprobreplacebetter
+\family default
+ or 
+\family typewriter
+lenprobreplacebetter
+\family default
+, 
+\family typewriter
+GA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Positive and negative bound of uniform distribution from which to sample
+ perturbations (small relative to expected values).
+ For the 
+\family typewriter
+GA
+\family default
+ rule, this is optional, and applied after crossover and mutate
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+CR
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+DEMC*
+\family default
+, any where 
+\family typewriter
+select = posprobreplacebetter
+\family default
+ or 
+\family typewriter
+lenprobreplacebetter
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Crossover probability (optional; if not given, no crossover occurs)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+chains
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+DEMCZ*
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of chains to explore (this is parameter 
+\begin_inset Formula $N$
+\end_inset
+
+ in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "BraakVrugt:2008"
+
+\end_inset
+
+, and 
+\begin_inset Formula $M_{0}=\textrm{population size}\mathrm{\mathit{-N}}$
+\end_inset
+
+).
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+K
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+DEMCZ*
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Number of steps to run chains before saving the exploring population to
+ matrix 
+\begin_inset Formula $\mathbf{Z}$
+\end_inset
+
+ (earlier chains explored).
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+pcrossover
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+GA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Crossover probability (classic style)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+pmutate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+GA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Mutation probability (classic style)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+pperturb
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+GA
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Perturbation probability.
+ Probability each gene is perturbed by 
+\family typewriter
+b
+\family default
+ (default 1 if 
+\family typewriter
+b
+\family default
+ is specified).
+ If this parameter is defined and 
+\family typewriter
+b
+\family default
+ is not, it will have no effect.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+keep
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+All
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+How many genomes to keep in the `hall of fame'
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DE
+\family default
+ Differential Evolution with arbitrary selection method (see 
+\family typewriter
+select
+\family default
+ parameter in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Parameters-for-rules"
+
+\end_inset
+
+).
+ This relies on an unbounded real search space, and there are a number of
+ implementation variants.
+ That used here is based on the characterisation in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Braak:2004"
+
+\end_inset
+
+, which generates a new proposal for a population member 
+\begin_inset Formula $\overrightarrow{g_{p}}$
+\end_inset
+
+ from three randomly selected members of the population 
+\begin_inset Formula $\overrightarrow{g_{a}}$
+\end_inset
+
+, 
+\begin_inset Formula $\overrightarrow{g_{b}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\overrightarrow{g_{c}}$
+\end_inset
+
+ thus: 
+\begin_inset Formula $\overrightarrow{g_{p}}=\overrightarrow{g_{a}}+\gamma\left(\overrightarrow{g_{b}}-\overrightarrow{g_{c}}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DEStrict
+\family default
+ Differential Evolution Markov Chain exactly as it appears in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Braak:2004"
+
+\end_inset
+
+.
+ This uses the 
+\family typewriter
+posreplacebetter
+\family default
+ selection method, which replaces 
+\begin_inset Formula $\overrightarrow{g_{a}}$
+\end_inset
+
+ with 
+\begin_inset Formula $\overrightarrow{g_{p}}$
+\end_inset
+
+ if 
+\begin_inset Formula $f\left(\overrightarrow{g_{p}}\right)>f\left(\overrightarrow{g_{a}}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $f\left(g\right)$
+\end_inset
+
+ is the fitness of a genome, computed as per equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:fg"
+
+\end_inset
+
+.
+ For multicriteria fitness functions, this condition is implemented as 
+\begin_inset Formula $f\left(\overrightarrow{g_{p}}\right)\succ f\left(\overrightarrow{g_{a}}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\succ$
+\end_inset
+
+ represents a partial order relation on two fitness vectors 
+\begin_inset Formula $\overrightarrow{\phi}$
+\end_inset
+
+ and 
+\begin_inset Formula $\overrightarrow{\psi}$
+\end_inset
+
+ defined by 
+\begin_inset Formula $\overrightarrow{\phi}\succ\overrightarrow{\psi}\Longleftrightarrow\forall i:\phi_{i}\geqslant\psi_{i}$
+\end_inset
+
+.
+ This is a stricter requirement, causing a proposed genome that is incomparable
+ with the existing one to be rejected.
+ Use of this selection method may thus be better in conjunction with the
+ -conflate option.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DEMC
+\family default
+ Differential Evolution Markov Chain with arbitrary selection method (see
+ 
+\family typewriter
+select
+\family default
+ parameter in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Parameters-for-rules"
+
+\end_inset
+
+).
+ This uses 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Braak:2004"
+
+\end_inset
+
+'s method for generating a new proposal 
+\begin_inset Formula $\overrightarrow{g_{p}}$
+\end_inset
+
+ for the 
+\begin_inset Formula $i$
+\end_inset
+
+th member of the population 
+\begin_inset Formula $\overrightarrow{g_{i}}$
+\end_inset
+
+ and two other randomly selected members 
+\begin_inset Formula $\overrightarrow{g_{a}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\overrightarrow{g_{b}}$
+\end_inset
+
+ thus: 
+\begin_inset Formula $\overrightarrow{g_{p}}=\overrightarrow{g_{i}}+\gamma\left(\overrightarrow{g_{a}}-\overrightarrow{g_{b}}\right)+\overrightarrow{e}$
+\end_inset
+
+, where 
+\begin_inset Formula $\overrightarrow{e}$
+\end_inset
+
+ represents a small perturbation, each element of which is taken from a
+ uniform distribution in the range [-
+\family typewriter
+b
+\family default
+, 
+\family typewriter
+b
+\family default
+].
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DEMCStrict
+\family default
+ Differential Evolution Markov Chain (almost) exactly as it appears in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Braak:2004"
+
+\end_inset
+
+.
+ Modifications have had to be made to cope with multiple criteria.
+ The 
+\family typewriter
+posprobreplacebetter
+\family default
+ selection method replaces an existing member of the population 
+\begin_inset Formula $g_{1}$
+\end_inset
+
+ with a new member 
+\begin_inset Formula $g_{2}$
+\end_inset
+
+ with probability 
+\begin_inset Formula $\min\left(1,\overline{f_{i}\left(g_{2}\right)/f_{i}\left(g_{1}\right)}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $f\left(g\right)$
+\end_inset
+
+ is the fitness of the genome, computed as per equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:fg"
+
+\end_inset
+
+, and 
+\begin_inset Formula $i$
+\end_inset
+
+ iterates over the elements of that vector.
+ That is to say, the probability of the new member replacing an existing
+ member, even if it has poorer fitnesses is given by the mean ratio of their
+ fitnesses.
+ Note that no check has been made that this generalisation to the multicriteria
+ case still enables the assumptions in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Braak:2004"
+
+\end_inset
+
+ to apply; use of DEMCStrict may thus be better in conjunction with the
+ -conflate option.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DEMCRlen
+\family default
+ Differential Evolution Markov Chain using a different generalisation of
+ the selection method (
+\family typewriter
+lenprobreplacebetter
+\family default
+) than 
+\family typewriter
+DEMCStrict
+\family default
+.
+ This computes the Metropolis ratio 
+\begin_inset Formula $r=\sqrt{\sum_{i}\left(f_{i}\left(g_{2}\right)/f_{i}\left(g_{1}\right)\right)^{2}}$
+\end_inset
+
+, replacing 
+\begin_inset Formula $g_{1}$
+\end_inset
+
+ with 
+\begin_inset Formula $g_{2}$
+\end_inset
+
+ with probability 
+\begin_inset Formula $\min\left(1,r\right)$
+\end_inset
+
+.
+ Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Generalisation-of-Metropolis-1"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Generalisation-of-Metropolis"
+
+\end_inset
+
+ compare the two methods.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DEMCZStrict
+\family default
+ Differential Evolution Markov Chain with resampling from earlier chains,
+ as per DEMCZ, described in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "BraakVrugt:2008"
+
+\end_inset
+
+, using the 
+\family typewriter
+posprobreplacebetter
+\family default
+ generalisation of the Metropolis ratio to multidimensional fitness functions.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DEMCZRlen
+\family default
+ Differential Evolution Markov Chain with resamping from earlier chains,
+ using the 
+\family typewriter
+lenprobreplacebetter
+\family default
+ selection method.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+DEMCStrictNormal
+\family default
+,
+\family typewriter
+
+\begin_inset space ~
+\end_inset
+
+DEMCRlenNormal
+\family default
+,
+\family typewriter
+
+\begin_inset space ~
+\end_inset
+
+DEMCZStrictNormal
+\family default
+,
+\family typewriter
+
+\begin_inset space ~
+\end_inset
+
+DEMCZRlenNormal
+\family default
+ Perturbation is done from 
+\begin_inset Formula $N\left(0,b\right)$
+\end_inset
+
+ as per 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Braak:2006"
+
+\end_inset
+
+ instead of 
+\begin_inset Formula $U\left(-b,b\right)$
+\end_inset
+
+ as per 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Braak:2004"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+GA
+\family default
+ Standard genetic algorithm generating new members of the population from
+ two randomly selected parents applying crossover, mutation (and optionally
+ perturbation) operators.
+ The 
+\family typewriter
+new
+\family default
+ selection method builds the new population only from the children, and
+ the 
+\family typewriter
+top
+\family default
+ selection method builds the new population from those in the combined proposed
+ and existing populations with the highest fitness.
+ The 
+\family typewriter
+lottery
+\family default
+ selection method allocates lottery tickets to each member of the proposed
+ population in ascending order of fitness, the 
+\begin_inset Formula $i$
+\end_inset
+
+th member of the sorted population getting 
+\begin_inset Formula $i$
+\end_inset
+
+ tickets.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+This is a fairly standard approach to breeding in GAs, but unfortunately
+ I don't have a reference for it.
+\end_layout
+
+\end_inset
+
+ The new population is then generated by choosing lottery tickets at random.
+ To cope with multicriteria fitness functions, sorting by fitness is achieved
+ by successively finding the Pareto front: the set of genomes such that
+ no other genome has better fitness (as defined above using 
+\begin_inset Formula $\succ$
+\end_inset
+
+).
+ (Members of this set will thus all be incomparable with each other.) Having
+ found the Pareto front in the population as a whole, the Pareto front is
+ found in the remaining population, and so on until all members of the populatio
+n are in the (descending order) sorted list.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Generalisation-of-Metropolis-1"
+
+\end_inset
+
+Generalisation of Metropolis ratio used by DEMCStrict and DEMCZStrict
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename multidimensional metropolis ratio.tiff
+	scale 10
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Generalisation-of-Metropolis"
+
+\end_inset
+
+Generalisation of Metropolis ratio used by DEMCRlen and DEMCZRlen
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename multidimensional metropolis ratio alt.tiff
+	scale 10
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+searchSPOMM
+\family default
+ section of the file specifies which SPOMM parameters you want searched.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Note that only numerical parameters can be explored.
+\end_layout
+
+\end_inset
+
+ These may be in the main SPOMM parameter file, or in the species file.
+ For the SPOMM file, write 
+\family typewriter
+SPOMM
+\family default
+ before the 
+\family typewriter
+/
+\family default
+, for the species file, write 
+\family typewriter
+species
+\family default
+ or 
+\family typewriter
+spp
+\family default
+.
+ The SPOMM parameter named after the 
+\family typewriter
+/
+\family default
+ should correspond to a parameter in the appropriate file.
+ For the SPOMM file, this should be one of the parameters exactly as it
+ is named in the SPOMM parameter file (e.g.
+ 
+\family typewriter
+xparam
+\family default
+) for the species file, this should be the column heading of the corresponding
+ parameter (e.g.
+ 
+\family typewriter
+ALPHA
+\family default
+, or whatever that column is called in your species file).
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Note that the parameters for only one species can currently be explored
+ by SPOMM-MGAv3.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After the colon, the prior distributions and constraints can be specified
+ for each SPOMM parameter.
+ The priors specify a distribution, which may be uniform, normal or exponential.
+ Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Priors"
+
+\end_inset
+
+ shows the options available here.
+ There are then two ways to impose constraints.
+ All SPOMM parameters must be given a 
+\emph on
+resampling
+\emph default
+ constraint: a constraint that, if violated, will caused a new value to
+ be sampled from the prior.
+ The format and options for this are shown in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Resampling-constraints."
+
+\end_inset
+
+ The option is also available to impose constraints on the priors mathematically.
+ Here, the sample from the prior is passed through a function before being
+ used in the genome.
+ This is represented in the file as a modifier on the prior, and the options
+ for doing this are in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Mathematically-composed-constraints."
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Priors"
+
+\end_inset
+
+Priors
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Prior format
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+U(
+\family default
+\emph on
+min
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+max
+\family typewriter
+\emph default
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Uniform distribution
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+N(
+\family default
+\emph on
+mean
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+var
+\family typewriter
+\emph default
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Normal distribution
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+E(
+\family default
+\emph on
+lambda
+\family typewriter
+\emph default
+)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Exponential distribution
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Resampling-constraints."
+
+\end_inset
+
+Resampling constraints.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="3in">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Constraint format
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+none
+\family default
+ or 
+\family typewriter
+X
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+No constraint
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+min
+\family typewriter
+\emph default
+<X<
+\family default
+\emph on
+max
+\emph default
+ or 
+\emph on
+min
+\family typewriter
+\emph default
+<=X<
+\family default
+\emph on
+max
+\emph default
+ or 
+\emph on
+min
+\family typewriter
+\emph default
+<X<=
+\family default
+\emph on
+max
+\emph default
+ or 
+\emph on
+min
+\family typewriter
+\emph default
+<=X<=
+\family default
+\emph on
+max
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Range
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+X<
+\family default
+\emph on
+max
+\emph default
+ or 
+\family typewriter
+X<=
+\family default
+\emph on
+max
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Upper bound
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\emph on
+min
+\family typewriter
+\emph default
+<X
+\family default
+ or 
+\emph on
+min
+\family typewriter
+\emph default
+<=X
+\family default
+ or 
+\family typewriter
+X>
+\family default
+\emph on
+min
+\emph default
+ or 
+\family typewriter
+X>=
+\family default
+\emph on
+min
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Lower bound
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Mathematically-composed-constraints."
+
+\end_inset
+
+Mathematically composed constraints.
+ In the formulae, 
+\begin_inset Formula $s$
+\end_inset
+
+ is the sample value returned to the genome, and 
+\begin_inset Formula $p$
+\end_inset
+
+ is the value sampled from the 
+\emph on
+prior
+\emph default
+, the options for which are shown in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Priors"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="3in">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Format
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+S[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+min
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+max
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose a range using a sigmoid: 
+\begin_inset Formula $s=min+\frac{max-min}{1+\exp\left(-p\right)}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+T[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+min
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+max
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose a range using hyperbolic tangent: 
+\begin_inset Formula $s=min+\frac{1}{2}+\frac{max-min}{2}\tanh\left(p\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+UV[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+max
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose an upper bound using 
+\begin_inset Formula $s=max-\left|p\right|$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+UE[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+max
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose an upper bound using 
+\begin_inset Formula $s=max-\exp\left(p\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Ue[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+max
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose an upper bound using 
+\begin_inset Formula $s=max-\exp\left(-p\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+LV[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+min
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose a lower bound using 
+\begin_inset Formula $s=min+\left|p\right|$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+LE[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+min
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose a lower bound using 
+\begin_inset Formula $s=min+\exp\left(p\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+Le[
+\family default
+\emph on
+prior
+\family typewriter
+\emph default
+,
+\family default
+\emph on
+min
+\family typewriter
+\emph default
+]
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Impose a lower bound using 
+\begin_inset Formula $s=min+\exp\left(-p\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\family typewriter
+search*BETA
+\family default
+ section of the file specifies sampling rules for each of the biophysical
+ characteristics.
+ The text to put before the colon depends on the mode you choose:
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+searchBETA
+\family default
+ Use 
+\family typewriter
+intercept
+\family default
+, the name of the file given on the command line to SPOMM-MGAv3 for the
+ biophysical characteristics, a list of such names, or 
+\family typewriter
+*
+\family default
+ for all names not given already.
+ Here, the (unmodified) habitat, 
+\begin_inset Formula $h=\overrightarrow{b_{i}}\overrightarrow{\beta_{g}}+c$
+\end_inset
+
+, where 
+\begin_inset Formula $\overrightarrow{b_{i}}$
+\end_inset
+
+ is the vector of biophysical characteristics on patch 
+\begin_inset Formula $i$
+\end_inset
+
+, 
+\begin_inset Formula $\overrightarrow{\beta_{g}}$
+\end_inset
+
+ is the vector of linear co-efficients of genome 
+\begin_inset Formula $g$
+\end_inset
+
+ for these, and 
+\begin_inset Formula $c$
+\end_inset
+
+ is the intercept.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+searchGaussianBETA
+\family default
+ Use the name of a file given on the command line to SPOMM-MGAv3 for the
+ biophysical characteristics followed by a caret (
+\family typewriter
+^
+\family default
+), followed by 
+\family typewriter
+M
+\family default
+ for the mean, or 
+\family typewriter
+S
+\family default
+ for the standard deviation, a list of these, or 
+\family typewriter
+*
+\family default
+ for any not already given.
+ The unmodified habitat here is 
+\begin_inset Formula $h=\prod_{j}\exp\left(-\left(b_{ij}-\beta_{gj}^{\left(\mu\right)}\right)^{2}/\left(\beta_{gj}^{\left(\sigma\right)}\right)^{2}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\overrightarrow{\beta_{g}^{\left(\mu\right)}}$
+\end_inset
+
+ is the part of the beta vector to use for the mean of the Gaussian, and
+ 
+\begin_inset Formula $\overrightarrow{\beta_{g}^{\left(\sigma\right)}}$
+\end_inset
+
+ the part to use for the standard deviation.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+searchPoly
+\family default
+\emph on
+m
+\family typewriter
+\emph default
+BETA
+\family default
+ Use the name of a file given on the command line to SPOMM-MGAv3 for the
+ biophysical characteristics followed by a caret (
+\family typewriter
+^
+\family default
+), followed by a number (
+\begin_inset Formula $\in\left\{ 1,\ldots,m\right\} $
+\end_inset
+
+), for the order of polynomial to use.
+ Here, 
+\begin_inset Formula $h=c+\sum_{j}\sum_{k=1,m}b_{ij}^{k}\beta_{gj}^{\left(k\right)}$
+\end_inset
+
+, using 
+\begin_inset Formula $\overrightarrow{\beta_{g}^{\left(k\right)}}$
+\end_inset
+
+ to represent the part of the beta vector to use as factors of the 
+\begin_inset Formula $k$
+\end_inset
+
+th power of the biophysical characteristics.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+searchSpline
+\emph on
+m
+\emph default
+BETA
+\family default
+ Use the name of a file given on the command line to SPOMM-MGAv3 for the
+ biophysical characteristics, followed by a caret and the letter S (
+\family typewriter
+^S
+\family default
+), followed by a number (
+\begin_inset Formula $\in\left\{ 1,\ldots,m\right\} $
+\end_inset
+
+), for the basis matrix column number to use.
+ Here, the biophysical characteristics file is expected to contain in columns
+ 3, ..., 
+\emph on
+m
+\emph default
+ + 2 the basis matrix for the biophysical characteristics data in column
+ 2 generated using the R function 
+\family typewriter
+ns()
+\family default
+.
+ Here, 
+\begin_inset Formula $h=\left(1+\exp\left(-\sum_{j}\sum_{k=1,m}s_{jk}\beta_{gj}^{(k)}\right)\right)^{-1}$
+\end_inset
+
+, using 
+\begin_inset Formula $\overrightarrow{\beta_{g}^{(k)}}$
+\end_inset
+
+ to represent the part of the beta vector 
+\emph on
+g
+\emph default
+ to use as the factor of the 
+\emph on
+k
+\emph default
+th basis matrix column.
+ Note that the formula for the habitat includes a sigmoid; this means the
+ 
+\family typewriter
+-habmod
+\family default
+ command line argument should not be used with this sampling rule.
+\end_layout
+
+\begin_layout Standard
+After the colon, give priors and constraints, formatted as per the 
+\family typewriter
+searchSPOMM
+\family default
+ section.
+\end_layout
+
+\begin_layout Standard
+The following shows an example GA file:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+population 100
+\end_layout
+
+\begin_layout Plain Layout
+
+generations 200
+\end_layout
+
+\begin_layout Plain Layout
+
+rule DEMCStrict
+\end_layout
+
+\begin_layout Plain Layout
+
+parameters {
+\end_layout
+
+\begin_layout Plain Layout
+
+	keep = 20
+\end_layout
+
+\begin_layout Plain Layout
+
+	gamma = 0.56
+\end_layout
+
+\begin_layout Plain Layout
+
+	b = 0.0001
+\end_layout
+
+\begin_layout Plain Layout
+
+	CR = 0.1
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+searchSPOMM {
+\end_layout
+
+\begin_layout Plain Layout
+
+	SPOMM / xparam : U(1,2) none
+\end_layout
+
+\begin_layout Plain Layout
+
+	species / ALPHA : S[N(0.9,0.1),0.3,1.3] 0.3<=X<1.3
+\end_layout
+
+\begin_layout Plain Layout
+
+	species / MU : E(0.5) X<=0.5
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+searchBETA {
+\end_layout
+
+\begin_layout Plain Layout
+
+	* : U(-10,10) none
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+According to 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Braak:2004"
+
+\end_inset
+
+, for differential evolution Markov Chain, 
+\family typewriter
+gamma
+\family default
+ should be set to 
+\begin_inset Formula $2.38/\surd\left(2d\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $d$
+\end_inset
+
+ is the number of dimensions being searched.
+\end_layout
+
+\begin_layout Subsection
+Occupancy file
+\end_layout
+
+\begin_layout Standard
+The occupancy file has a simple text format, in two or three columns, separated
+ by white space, the last column of which is expected to contain the occupancy
+ of a patch.
+ In a two-column file, the first column should be the patch ID; in a three-colum
+n file, the first two columns should be the x and y co-ordinates of the
+ patch.
+ In either case, the order in which the patches appear should be exactly
+ the same order as the SPOMM writes the patches to the 
+\family typewriter
+speciesPerPatchFile
+\family default
+ (in ascending order of patch ID, sorted also by x co-ordinate first, then
+ y).
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+The easiest way to generate the occupancy file and biophysical characteristics
+ files is to run 
+\family typewriter
+setup-speciesdist2.pl
+\family default
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Biophysical-characteristics-file"
+
+\end_inset
+
+Biophysical characteristics file
+\end_layout
+
+\begin_layout Standard
+The biophysical characteristics file is a comma separated value file in
+ two columns, the first of which is the patch ID, and the second is the
+ value of the biophysical characteristic for that patch.
+ As mentioned above, if you use 
+\family typewriter
+searchSpline*BETA
+\family default
+ for the biophysical characteristics sampling rule, then the biophysical
+ characteristics file is expected to contain additional columns holding
+ the basis matrix.
+ The script 
+\family typewriter
+enspline.R
+\family default
+ is available to provide the necessary conversion.
+\end_layout
+
+\begin_layout Subsection
+SPOMM file
+\end_layout
+
+\begin_layout Standard
+Refer to the SPOMM user guide for the format of this file.
+ Note that certain parameters in this file will get overwritten whilst the
+ GA is executing; specifically, 
+\family typewriter
+speciesPerPatchFile
+\family default
+, 
+\family typewriter
+nStepListSpecies
+\family default
+, 
+\family typewriter
+patchFile
+\family default
+ and 
+\family typewriter
+speciesFile
+\family default
+.
+ However, you should provide a species file in the SPOMM parameter file
+ so that the GA knows what species parameters you want to use that are not
+ going to be searched, and the names of the parameters that will be searched.
+ Note that you do not have to ensure that all files referred to by the 
+\family typewriter
+changeHabitatFile
+\family default
+, 
+\family typewriter
+autoCorrelatedFieldFile
+\family default
+, 
+\family typewriter
+goodBadYearFile
+\family default
+, 
+\family typewriter
+csvLocalizedField_file
+\family default
+, 
+\family typewriter
+landUseHabitatFile
+\family default
+, 
+\family typewriter
+predationFile
+\family default
+, 
+\family typewriter
+habitatSpecificMuFile
+\family default
+, 
+\family typewriter
+sinkHabitatPropertieFile
+\family default
+ and 
+\family typewriter
+occupiedPatchesPerSpeciesOutputFile
+\family default
+ parameters exist in the current working directory.
+ Those that do will be copied across; those that do not will be created
+ as empty files.
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Fitness-function"
+
+\end_inset
+
+Fitness function
+\end_layout
+
+\begin_layout Standard
+The fitness function 
+\begin_inset Formula $f\left(g\right)$
+\end_inset
+
+ computed by the program for each genome 
+\begin_inset Formula $g$
+\end_inset
+
+ is an up to seven-element vector (five if the -fitnessnoccup option is
+ given on the command-line and the -fitnesshalfpenalty option is not given):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+f\left(g\right)=\left(\begin{array}{c}
+p\left(g\right)\\
+y\left(g\right)\\
+q\left(g\right)\\
+r\left(g\right)\\
+m\left(g\right)\\
+s\left(g\right)\\
+h\left(g\right)
+\end{array}\right)\label{eq:fg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The functions are defined in subsequent formulae.
+ 
+\begin_inset Formula $p\left(g\right)$
+\end_inset
+
+ is a fitness representing the number of patches for which the 
+\begin_inset Formula $\overrightarrow{\beta}$
+\end_inset
+
+ vector of the genome produced a valid habitat (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:pg"
+
+\end_inset
+
+).
+ 
+\begin_inset Formula $y\left(g\right)$
+\end_inset
+
+ is a fitness representing the number of time steps the simulation ran for
+ before total extinction (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:yg"
+
+\end_inset
+
+).
+ 
+\begin_inset Formula $q\left(g\right)$
+\end_inset
+
+ is a fitness representing the degree to which the latter half of the simulation
+ was in equilibrium with respect to occupancy (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:qg"
+
+\end_inset
+
+).
+ This is tested using a 5% two-tailed significance test comparing the distributi
+ons of occupancy in the third and fourth quarters of the simulation assuming
+ they are normally distributed.
+ The null hypothesis is that these two distributions are the same.
+ 
+\begin_inset Formula $r\left(g\right)$
+\end_inset
+
+ is a fitness representing the number of patches that have reached equilibrium
+ occupancy (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:rg"
+
+\end_inset
+
+).
+ 
+\begin_inset Formula $m\left(g\right)$
+\end_inset
+
+ is a fitness representing the degree of match, patch by patch, between
+ the genome's mean equilibrium occupancy and the observed occupancy (equation
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mg"
+
+\end_inset
+
+).
+ 
+\begin_inset Formula $s\left(g\right)$
+\end_inset
+
+ is a fitness representing the degree of similarity between the genome's
+ total occupancy and that observed (equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sg"
+
+\end_inset
+
+) and is not included in the 
+\begin_inset Formula $f\left(g\right)$
+\end_inset
+
+ vector if -fitnessnooccup is given on the command-line.
+ 
+\begin_inset Formula $h\left(g\right)$
+\end_inset
+
+ is a function measuring the number of patches with mean equilibrium occupancy
+ close to 0 or 1.
+ This is an attempt to avoid `blobs' (see figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Output-from-blob.R"
+
+\end_inset
+
+), where the search algorithm can achieve a reasonably good match by setting
+ parameters such that the mean occupancy is close to 
+\begin_inset Formula $\frac{1}{2}$
+\end_inset
+
+.
+ Note that the cases in equations 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:mg"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:sg"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:hg"
+
+\end_inset
+
+ for total extinction can be switched off if the -useextinct command-line
+ option is given.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+p\left(g\right)=\begin{cases}
+0.1 & \textrm{run failed}\\
+1+\frac{\#\left\{ i\in\left\{ 1,...,P\right\} :\overrightarrow{\beta_{g}}.\overrightarrow{b_{i}}\in\left[0,1\right]\right\} }{P} & \exists i\in\left\{ 1,...,P\right\} :\overrightarrow{\beta_{g}}.\overrightarrow{b_{i}}\notin\left[0,1\right]\\
+P+2 & \textrm{otherwise}
+\end{cases}\label{eq:pg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+y\left(g\right)=\begin{cases}
+0.1 & \textrm{run failed}\\
+1+t_{E} & \exists t_{E}\in\left\{ 1,...,T\right\} :\Omega\left(t_{E}\right)=0\\
+T+1 & \textrm{otherwise}
+\end{cases}\label{eq:yg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+q\left(g\right)=\begin{cases}
+0.1 & \textrm{run failed or total extinction}\\
+1+\frac{m}{\left|Z\left(Q_{3}-Q_{4}\right)\right|} & \left|Z\left(Q_{3}-Q_{4}\right)\right|>1.96\\
+2+\frac{m}{1.96} & \textrm{otherwise}
+\end{cases}\label{eq:qg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+r\left(g\right)=\begin{cases}
+0.1 & \textrm{run failed or total extinction}\\
+N_{E} & \textrm{otherwise}
+\end{cases}\label{eq:rg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+m\left(g\right)=\begin{cases}
+0.1 & \textrm{run failed or total extinction}\\
+\sum_{i=1,P}1-\left(o_{i}-\overline{\omega_{i}\left(t\right)}\right)^{2},\,\frac{T}{2}<t\leqslant T & \textrm{otherwise}
+\end{cases}\label{eq:mg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+s(g)=\begin{cases}
+0.1 & \textrm{run failed or total extinction}\\
+P-\left|\sum_{i=1,P}o_{i}-\sum_{i=1,P}\overline{\omega_{i}\left(t\right)}\right|\,\frac{T}{2}<t\leqslant T & \textrm{otherwise}
+\end{cases}\label{eq:sg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+h\left(g\right)=\begin{cases}
+0.1 & \textrm{run failed or total extinction}\\
+2\sum_{i=1,P}\left|\overline{\omega_{i}\left(t\right)}-\frac{1}{2}\right|\,\frac{T}{2}<t\leqslant T & \textrm{otherwise}
+\end{cases}\label{eq:hg}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $P$
+\end_inset
+
+ is the number of patches, 
+\begin_inset Formula $\overrightarrow{\beta_{g}}$
+\end_inset
+
+ is the beta vector for genome 
+\begin_inset Formula $g$
+\end_inset
+
+, 
+\begin_inset Formula $\overrightarrow{b_{i}}$
+\end_inset
+
+ is the vector of biophysical characteristics on patch 
+\begin_inset Formula $i$
+\end_inset
+
+ (the dot product of these vectors being the habitat on patch 
+\begin_inset Formula $i$
+\end_inset
+
+), 
+\begin_inset Formula $\Omega\left(t\right)$
+\end_inset
+
+ is the total occupancy at time 
+\begin_inset Formula $t$
+\end_inset
+
+ (the number of occupied patches), 
+\begin_inset Formula $T$
+\end_inset
+
+ is the number of time steps the simulation is run for, 
+\begin_inset Formula $t_{E}$
+\end_inset
+
+ is the time, if it exists, at which there is zero occupancy, 
+\begin_inset Formula $Q_{i}$
+\end_inset
+
+ (
+\begin_inset Formula $i\in\left\{ 1,2,3,4\right\} $
+\end_inset
+
+) is the distribution of 
+\begin_inset Formula $\Omega\left(t\right)$
+\end_inset
+
+ for the 
+\begin_inset Formula $i$
+\end_inset
+
+th quarter of the simulation (e.g.
+ 
+\begin_inset Formula $Q_{1}$
+\end_inset
+
+ is the distribution of 
+\begin_inset Formula $\Omega\left(t\right)$
+\end_inset
+
+, 
+\begin_inset Formula $1\leqslant t<\frac{T}{4}$
+\end_inset
+
+), 
+\begin_inset Formula $Z\left(Q_{3}-Q_{4}\right)=\left(\overline{Q_{3}}-\overline{Q_{4}}\right)/\sqrt{\sigma_{Q_{3}}^{2}/\left(T/4\right)+\sigma_{Q_{4}}^{2}/\left(T/4\right)}$
+\end_inset
+
+ is the Z statistic of the difference in the (assumed normal) distributions
+ of the occupancy in the third and fourth quarters of the simulation, 
+\begin_inset Formula $N_{E}$
+\end_inset
+
+ is the number of patches that have reached equilibrium, 
+\begin_inset Formula $o_{i}$
+\end_inset
+
+ is the observed occupancy on patch 
+\begin_inset Formula $i$
+\end_inset
+
+, and 
+\begin_inset Formula $\omega_{i}\left(t\right)\in\left\{ 1,0\right\} $
+\end_inset
+
+ is the occupancy on patch 
+\begin_inset Formula $i$
+\end_inset
+
+ at time 
+\begin_inset Formula $t$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The number of patches that have reached equilibrium is computed by conducting
+ a binomial test, for each patch in turn, comparing the distribution of
+ occupancy 
+\begin_inset Formula $\omega_{i}\left(t\right)$
+\end_inset
+
+ in 
+\begin_inset Formula $Q_{3}$
+\end_inset
+
+ with that in 
+\begin_inset Formula $Q_{4}$
+\end_inset
+
+.
+ This test uses a normal approximation to the binomial when this is expected
+ to be good (
+\begin_inset Formula $np\geqslant5$
+\end_inset
+
+ and 
+\begin_inset Formula $n\left(1-p\right)\geqslant5$
+\end_inset
+
+ is apparently the commonly used heuristic), but otherwise resorts to the
+ binomial itself.
+ Testing for similarity of two binomial distributions is achieved by computing
+ the probability they are the same, i.e.
+ computing 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ (using 
+\begin_inset Formula $\omega_{i}\left(Q_{j}\right)$
+\end_inset
+
+ for the mean occupancy of patch 
+\begin_inset Formula $i$
+\end_inset
+
+ during the 
+\begin_inset Formula $j$
+\end_inset
+
+th quarter of the simulation and 
+\begin_inset Formula $\left({n\atop r}\right)$
+\end_inset
+
+ for the number of combinations of 
+\begin_inset Formula $n$
+\end_inset
+
+ things, taken 
+\begin_inset Formula $r$
+\end_inset
+
+ at a time):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+P_{i}=\sum_{t=1,\left\lfloor \frac{T}{4}\right\rfloor }\left({\left\lfloor \frac{T}{4}\right\rfloor \atop t}\right)^{2}\omega_{i}\left(Q_{3}\right)^{t}\left(1-\omega_{i}\left(Q_{3}\right)\right)^{\left\lfloor \frac{T}{4}\right\rfloor -t}\omega_{i}\left(Q_{4}\right)^{t}\left(1-\omega_{i}\left(Q_{4}\right)\right)^{\left\lfloor \frac{T}{4}\right\rfloor -t}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The fitness vector can be converted to a scalar using the -conflate command-line
+ option, as explained in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Command-line-options-available"
+
+\end_inset
+
+.
+ The weight vectors for the 
+\family typewriter
+wsum
+\family default
+ and 
+\family typewriter
+wproduct
+\family default
+ conflations should give weights for fitness components in the order given
+ in equation 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:fg"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Output"
+
+\end_inset
+
+Output
+\end_layout
+
+\begin_layout Standard
+SPOMM-MGAv3 creates as output the log file containing information on progress
+ with the run, and at the end of the simulation, the best 
+\emph on
+N
+\emph default
+ genomes found (
+\emph on
+N
+\emph default
+ being the value of the 
+\family typewriter
+keep
+\family default
+ parameter in the GA file, or the population size if this parameter is not
+ specified) are recorded there, along with the fitness and the generation
+ in which they were found.
+\end_layout
+
+\begin_layout Standard
+If the -keepall option is given on the command line, all files created to
+ set up and run the SPOMM for each genome will be in a subdirectory of the
+ working directory (either default or supplied by the argument to the -wd
+ command line option).
+ Each subdirectory is named by the process ID that ran the SPOMM.
+ If GA runs for so long that process IDs are recycled, then the subdirectory
+ named by the process ID corresponds to the most recent run with that PID;
+ earlier runs being moved to a directory named 
+\emph on
+pid
+\emph default
+-
+\emph on
+n
+\emph default
+, where 
+\emph on
+n
+\emph default
+ is 0 for the first use of that PID, and increases by 1 for each reuse.
+ The log file should contain a record of which runs are stored in which
+ subdirectories.
+\end_layout
+
+\begin_layout Standard
+Otherwise, if the -deleteall option is not given, then in a directory hof
+ will be subdirectories named as described above for the -keepall option
+ containing the setup and output files from best 
+\begin_inset Formula $N$
+\end_inset
+
+ genomes found.
+\end_layout
+
+\begin_layout Standard
+Included in these subdirectories is a file containing the mean species distribut
+ion over the latter half of the simulation.
+ This will be named sppdist-
+\emph on
+pid
+\emph default
+.txt, and it will have the same format as the occupancy file, except that
+ the final column will contain numbers in the range [0, 1] rather than from
+ the set {0, 1}.
+ If you have access to the blob.R script, and have not given -noblob on the
+ command line, then a file named sppdist-
+\emph on
+pid
+\emph default
+.pdf will contain a visualisation of the distribution.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Output-from-blob.R"
+
+\end_inset
+
+ shows some example output from this script, which is useful for inspecting
+ whether a proposed solution is a good match for the data being modelled.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Output-from-blob.R"
+
+\end_inset
+
+Output from blob.R, showing why the image got its name -- early results from
+ previous versions of this program tended not to find particularly good
+ solutions.
+ The colour of each cell shows the probability of occupancy (over the equilibriu
+m period), as indicated by the scale on the right hand side of the image.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename sppdist-27341.tiff
+	scale 33
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In addition, SPOMM-MGAv3 saves the population state at the final generation
+ to the working directory in a file named state-
+\emph on
+pid
+\emph default
+.txt.
+ This file is designed to be used by subsequent runs to start from this
+ state.
+ However, there is no reason why you cannot create such a file yourself
+ to store an initial population you wish to use.
+ The format is as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+CWD
+\end_layout
+
+\begin_layout Plain Layout
+
+<current working directory>
+\end_layout
+
+\begin_layout Plain Layout
+
+<working directory>
+\end_layout
+
+\begin_layout Plain Layout
+
+ARGV
+\end_layout
+
+\begin_layout Plain Layout
+
+<command line arguments, one per line>
+\end_layout
+
+\begin_layout Plain Layout
+
+POPULATION
+\end_layout
+
+\begin_layout Plain Layout
+
+<id>: [<gene1> = <value1>, <gene2> = <value2>, ...] : (<f1>, <f2>, ...)
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the POPULATION section, there is one line per population member.
+ The ID is a process ID of the fork of SPOMM-MGAv3 that spawned the SPOMM
+ run, it is used to see if the data from that run can be found.
+ If you are generating this file yourself, and don't have the data, an arbitrary
+ value can be used here.
+ In the square brackets, the sample genome is given as a comma-separated
+ list of key = value pairs.
+ The keys are the names of SPOMM parameters and beta vector files in the
+ order they appear in the GA file (see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:GA-file"
+
+\end_inset
+
+).
+ The values are those to insert in the genome.
+ In parentheses in a comma-separated list at the end of the line is the
+ fitness vector, as used by the GA for population selection (i.e.
+ including any conflation).
+ This is ignored if the original run data are not available.
+\end_layout
+
+\begin_layout Section
+Utilities
+\end_layout
+
+\begin_layout Subsection
+
+\family typewriter
+setup-speciesdist2.pl
+\end_layout
+
+\begin_layout Standard
+This is a utility to help set up the files you need to run SPOMM-MGAv3.
+ It is designed to assist in creating experiments for using SPOMM-MGAv3.
+ For this, it is important to understand the difference between `god' mode
+ and `mortal' mode.
+ In `god' mode, which will not be the normal case for running SPOMM-MGAv3,
+ the `true' habitats are known in advance, and this script can be used to
+ create an occupancy distribution with the also known species 
+\begin_inset Formula $\alpha$
+\end_inset
+
+, 
+\begin_inset Formula $\mu$
+\end_inset
+
+, and 
+\begin_inset Formula $x$
+\end_inset
+
+ parameters for SPOMM-MGAv3 to fit.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Note this sort of assumes that these are the species parameters that will
+ be searched; hence the searchSPOMM section of the GA file will have lines
+ for 
+\family typewriter
+SPOMM / xparam
+\family default
+, 
+\family typewriter
+species / ALPHA
+\family default
+ and 
+\family typewriter
+species / MU
+\family default
+, as illustrated in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:GA-file"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ In `mortal' mode, only the biophysical characteristics and occupancy are
+ known, and this script can be used to create SPOMM and biophysical characterist
+ics files to supply as command line arguments to SPOMM-MGAv3, including
+ (via a call to 
+\family typewriter
+enspline.R
+\family default
+) basis matrix, if the 
+\family typewriter
+searchSpline*BETA
+\family default
+ sample rule is being used.
+\end_layout
+
+\begin_layout Subsubsection
+Synopsis (`mortal' mode)
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+setup-speciesdist2.pl [-toroidal] [-splines <degrees of freedom>] [-biocols
+ <list of column headings...>] [-xcol <x column heading>] [-ycol <y column
+ heading>] [-enspline <enspline.R location>] -mortal <experiment name> <biophysic
+al variables file>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The experiment name simply provides a prefix for the files created by the
+ script, and the biophysical variables file contains the biophysical variables.
+ This is expected to be a text file, with columns for the x and y co-ordinates
+ of each cell, and for the value of each biophysical characteristics variable
+ in that cell.
+ There is one line in the text file for each cell, and the file should start
+ with a column heading line.
+ White space separates entries in this file, hence column headings may not
+ contain spaces.
+ There are the following options:
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-toroidal
+\family default
+ Stipulates a toroidal environment in the SPOMM file instead of the default
+ bounded planar topology.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-splines
+\family default
+ Create biophysical characteristics files with basis matrix columns added
+ with the given number of degrees of freedom.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-biocols
+\family default
+ Provide a comma-separated list of column headings for biophysical characteristi
+cs variables to use.
+ (The default is to assume all columns not headed with the x or y co-ordinate
+ column headings are biophysical characteristics variables.)
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-xcol
+\family default
+ Specify the x co-ordinate column heading (default `
+\family typewriter
+x
+\family default
+')
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-ycol
+\family default
+ Specify the y co-ordinate column heading (default `
+\family typewriter
+y
+\family default
+')
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-enspline
+\family default
+ Provide a non-default location for the 
+\family typewriter
+enspline.R
+\family default
+ script (only needed if the 
+\family typewriter
+-splines
+\family default
+ option is used).
+\end_layout
+
+\begin_layout Subsubsection
+Output (`mortal' mode)
+\end_layout
+
+\begin_layout Standard
+The script creates the following files:
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+\emph on
+expt_name
+\emph default
+-biophys-
+\emph on
+var_name
+\emph default
+.csv
+\family default
+ The biophysical characteristics files to pass to SPOMM-MGAv3.
+ There will be one file per biophysical characteristics column, with 
+\family typewriter
+\emph on
+var_name
+\family default
+\emph default
+ corresponding to the column heading for that variable in the biophysical
+ variables file.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+\emph on
+expt_name
+\emph default
+-species.csv
+\family default
+ A species file, with default values for species parameters.
+ You should edit this file so that it matches your expectations for the
+ variables you will not be asking the GA to search.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+\emph on
+expt_name
+\emph default
+.spom
+\family default
+ A SPOMM file, for you to pass to SPOMM-MGAv3.
+ As per the species file, you should edit this file so that it matches your
+ expectations for the variables you will not be asking the GA to search.
+\end_layout
+
+\begin_layout Subsubsection
+Synopsis (`god' mode)
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+setup-speciesdist2.pl [-prob <steps>] [-sample <nspp>] [-seed <seed>] [-toroidal]
+ [-splines <degrees of freedom>] [-biocols <list of column headings...>] [-habcol
+ <column heading>] [-xcol <x column heading>] [-ycol <y column heading>]
+ [-spom <SPOMM location>] [-enspline <enspline.R location>] <experiment name>
+ <biophysical variables file> <habitat file> <alpha> <mu> <x param> <nsteps>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The additional command line arguments specify the location of the habitat
+ file (which may be the same as the biophysical characteristics file if
+ the 
+\family typewriter
+-habcol
+\family default
+ and 
+\family typewriter
+-biocols
+\family default
+ options are used), the species parameters 
+\begin_inset Formula $\alpha$
+\end_inset
+
+, 
+\begin_inset Formula $\mu$
+\end_inset
+
+, and 
+\begin_inset Formula $x$
+\end_inset
+
+ to use, and the number of steps to run the SPOMM before measuring occupancy.
+ The command-line options in addition to those available in `mortal' mode
+ are as follows:
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-prob
+\family default
+ Sample the probability of occupancy over the number of steps specified
+ rather than just whether or not the species is present
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-sample
+\family default
+ Repeat the sample the specified number of times.
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-seed
+\family default
+ Stipulate a seed to run the SPOMM with
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-habcol
+\family default
+ Give a name for the habitat column in the habitat file (by default, it
+ is assumed to be the first column after whichever is the later of the x
+ and y co-ordinate columns).
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+-spom
+\family default
+ Give a non-default location for spom-2.3.
+\end_layout
+
+\begin_layout Standard
+The habitat file has the same format as the biophysical variables file in
+ `mortal' mode.
+\end_layout
+
+\begin_layout Subsubsection
+Output (`god' mode)
+\end_layout
+
+\begin_layout Standard
+In addition to the outputs for `mortal' mode, in `god' mode, all the files
+ needed to run the SPOMM are created, but the main output is the occupancy
+ file:
+\end_layout
+
+\begin_layout Description
+
+\family typewriter
+\emph on
+expt_name
+\emph default
+-sppdist.txt
+\family default
+ This file has a text format, with columns specifying the patch, and for
+ each sample, the occupancy, either as 1 or 0, or if the 
+\family typewriter
+-prob
+\family default
+ command line option is given, as a number representing the proportion of
+ steps for which the patch was occupied.
+ (Note that SPOMM-MVAv3 will only pay attention to the last sample column.)
+\end_layout
+
+\begin_layout Standard
+A CSV format summary of the occupancy is also printed to standard output.
+ Plotting this using R can be useful in determining the equilibrium status
+ of the occupancy during the course of the SPOMM run.
+ For this reason, recommended usage is to redirect the output of the script
+ to 
+\family typewriter
+\emph on
+expt_name
+\emph default
+-sppdist.csv
+\family default
+.
+\end_layout
+
+\begin_layout Subsection
+
+\family typewriter
+enspline.R
+\end_layout
+
+\begin_layout Standard
+This is a simple R script to create basis matrices for a series of biophysical
+ characteristics files.
+\end_layout
+
+\begin_layout Subsubsection
+Synopsis
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+enspline.R <degrees of freedom> <biophysical characteristics files ...>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here, degrees of freedom is the number of knots plus one, and biophysical
+ characteristics files is a list of the biophysical characteristics files
+ to convert.
+ Each biophysical characteristics file is expected to be a two-column headed
+ CSV file in the format specified in section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Biophysical-characteristics-file"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Output
+\end_layout
+
+\begin_layout Standard
+The script overwrites the biophysical characteristics files, adding columns
+ containing the basis matrix (the result of running the R function 
+\family typewriter
+ns(data[,2], df = dof
+\family default
+), where 
+\family typewriter
+dof
+\family default
+ is the first command-line option and 
+\family typewriter
+data
+\family default
+ is the table loaded in from the biophysical characteristics file).
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "M:/doc/research/bib/Bibliography,/Users/gp1073/Documents/Bibliography"
+options "alpha"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
